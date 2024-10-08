@@ -1,0 +1,6 @@
+@API_Nlog_HostAddress = http://localhost:5212
+
+GET {{API_Nlog_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,6 @@
+@API_OpenTelemetryPrometheus_HostAddress = http://localhost:5242
+
+GET {{API_OpenTelemetryPrometheus_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

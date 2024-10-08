@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API-Prometheus", "API-Prometheus.csproj", "{AAE3B9E6-2867-428C-9306-D581D139A33C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAE3B9E6-2867-428C-9306-D581D139A33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE3B9E6-2867-428C-9306-D581D139A33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE3B9E6-2867-428C-9306-D581D139A33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE3B9E6-2867-428C-9306-D581D139A33C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E1414C0-5582-42EC-8BCE-F0A72EF28E83}
+	EndGlobalSection
+EndGlobal
