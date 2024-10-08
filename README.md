@@ -4,11 +4,12 @@
 O projeto vai contar com um arquivo composer para gerenciar toda infrastrutura, que depende do estudos de caso, contato até o momento com:
 
 ```
+Redis
 Prometheus
 Grafana
 Elasticsearch
 Kibana
-Rabittmq
+RabbitMq
 Mongo
 Mongo-Express
 SqlServer

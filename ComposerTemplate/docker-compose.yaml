@@ -1,6 +1,15 @@
 version: "3.8"
 services:
 
+  #Redis
+  redis:
+    container_name: 'redis_server'
+    image: redis
+    restart: always
+    command: redis-server --requirepass Admin@#
+    ports:
+      - '6379:6379'
+
   #Mongo
   mongodb:
     image: mongo
