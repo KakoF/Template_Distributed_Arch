@@ -1,0 +1,124 @@
+version: "3.8"
+services:
+
+  #Mongo
+  mongodb:
+    image: mongo
+    container_name: mongodb-template
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin_1234
+    ports:
+      - "27017:27017"
+    command: mongod --bind_ip 0.0.0.0
+
+  #MongoExpress
+  mongo-express:
+    container_name: mongo-express-template
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin_1234
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin_1234@mongodb:27017/
+
+  #Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    user: root
+    container_name: prometheus-template
+    hostname: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus-conf/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 9090:9090
+    networks:
+      - template
+
+  #Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: grafana-template
+    hostname: grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - template
+
+  #Elasticsearch
+  elasticsearch:
+    container_name: elasticsearch-template
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    ports:
+      - 9200:9200
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    networks:
+      - template
+
+  #Kibana
+  kibana:
+    container_name: kibana-template
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_URL=http://localhost:9200
+    networks:
+      - template
+
+  #RabbitMq
+  rabbitmq:
+    container_name: rabbitmq-template
+    image: masstransit/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  #SqlServer
+  sqlServer:
+    container_name: sqlServer-template
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: '!AdminPassword'
+    ports:
+      - '1433:1433'
+    expose:
+      - '1433'
+
+  postgres:
+    container_name: postgres-template
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: AdminPassword
+      POSTGRES_USER: Admin
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+
+volumes:
+  prometheus_data: {}
+  elasticsearch-data: 
+networks:
+  template:
+    driver: bridge
