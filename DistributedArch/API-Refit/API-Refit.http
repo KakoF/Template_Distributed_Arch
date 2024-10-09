@@ -1,0 +1,6 @@
+@API_Refit_HostAddress = http://localhost:5184
+
+GET {{API_Refit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
