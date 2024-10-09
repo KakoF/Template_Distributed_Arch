@@ -1,4 +1,5 @@
 ﻿using API_ErrorHandler.Middlewares;
+using Prometheus;
 
 namespace API_ErrorHandler.Extensions
 {
@@ -8,6 +9,11 @@ namespace API_ErrorHandler.Extensions
 		{
 			app.UseMiddleware(typeof(RequestTracingMiddleware));
 			app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+		}
+		public static void UsePrometheus(this WebApplication app)
+		{
+			app.UseHealthChecksPrometheusExporter("/metrics");
+			app.UseHttpMetrics();
 		}
 	}
 }

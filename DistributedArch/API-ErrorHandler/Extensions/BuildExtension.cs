@@ -1,5 +1,6 @@
 ﻿using API_ErrorHandler.Domain.Interfaces.Services;
 using API_ErrorHandler.Service.Services;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Sinks.Elasticsearch;
@@ -13,6 +14,14 @@ namespace API_ErrorHandler.Extensions
 		public static void AddServices(this WebApplicationBuilder builder)
 		{
 			builder.Services.AddScoped<ISomeService, SomeService>();
+		}
+
+		public static void AddHealthChecks(this WebApplicationBuilder builder)
+		{
+
+			builder.Services.AddHealthChecks()
+			.AddCheck("self", () => HealthCheckResult.Healthy())
+			.AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
 		}
 
 		public static void ConfigureLogging(this WebApplicationBuilder builder)
