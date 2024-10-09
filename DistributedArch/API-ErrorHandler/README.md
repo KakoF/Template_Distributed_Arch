@@ -197,3 +197,42 @@ return context.Response.WriteAsync(result);
 Onde **DomainException** geram Logs de Warnings
 
 E **Exceptions** geram Logs de Erros
+
+### Trace
+
+O projeto também tem uma abordagem de trace da requisições também utilizado como middleware **RequestTracingMiddleware**
+
+
+```c#
+public async Task InvokeAsync(HttpContext context)
+{
+	// Tenta pegar o Tracing ID do header ou gera um novo
+	var tracingId = context.Request.Headers["X-Tracing-ID"].FirstOrDefault() ?? Guid.NewGuid().ToString();
+
+	// Adiciona o correlation ID ao contexto de logging
+	using (LogContext.PushProperty("TracingId", tracingId))
+	{
+		// Adiciona o correlation ID aos headers HTTP para serviços downstream
+		context.Response.Headers.Add("X-Tracing-ID", tracingId);
+
+		// Chama o próximo middleware na pipeline
+		await _next(context);
+	}
+
+}
+```
+Na entrada de requisição ele seta esse valor X-Tracing-ID no header e após TracingId no Log. Porque?!
+
+Imagina que essa requisição integra com outros clients (que devem ter a mesma implementação), então se já tiver um TracingId setado no request que integramos, ele vai persistir o valor
+```c#
+var tracingId = context.Request.Headers["X-Tracing-ID"].FirstOrDefault() ?? Guid.NewGuid().ToString();
+```
+
+E isso você vai conseguir acompanhar nos logs por esse identificador, conseguindo fazer um trace (rastreio) entre serviços:
+```
+Oct 8, 2024 @ 21:35:32.234      Info      Entrou sem problemas       Client1     23db24e1-246b-49be-97cf-47258797cac2
+
+Oct 9, 2024 @ 21:35:32.234      Erro          Exception              Client2     23db24e1-246b-49be-97cf-47258797cac2
+```
+
+Olhando esse exemplo acima, vemos que o **Client1** teve uma info e chamou o client2, que teve um erro. Então pelo TracingId (23db24e1-246b-49be-97cf-47258797cac2) sabemos que essa requisição fazem parte do mesmo fluxo de execução em serviços diferentes
