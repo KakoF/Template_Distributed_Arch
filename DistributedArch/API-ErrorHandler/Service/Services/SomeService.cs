@@ -13,27 +13,27 @@ namespace API_ErrorHandler.Service.Services
 
 		public double DoDivision(string number)
 		{
-			_logger.LogInformation("Called DoDivision Method");
+			_logger.LogInformation("Execute DoDivision Method");
 			return Convert.ToDouble(number) / 2;
 		}
 
 		public string Get()
 		{
-			_logger.LogInformation("Called Get Method");
+			_logger.LogInformation("Execute Get Method");
 			throw new DomainException("Generic Error");
 			return "string";
 		}
 
 		public string GetMockErro(int statusCode, string erroMessage)
 		{
-			_logger.LogInformation("Called GetMockErro Method");
+			_logger.LogInformation("Execute GetMockErro Method");
 			throw new DomainException(erroMessage, statusCode);
 			return "string";
 		}
 
 		public string GetMockErro(int statusCode, string erroMessage, List<string> erros)
 		{
-			_logger.LogInformation("Called GetMockErro Method");
+			_logger.LogInformation("Execute GetMockErro Method");
 			throw new DomainException(erroMessage, erros, statusCode);
 			return "string";
 		}
