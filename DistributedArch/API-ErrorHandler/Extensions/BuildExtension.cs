@@ -21,7 +21,7 @@ namespace API_ErrorHandler.Extensions
 
 			builder.Services.AddHealthChecks()
 			.AddCheck("self", () => HealthCheckResult.Healthy())
-			.AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
+			.AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, timeout: TimeSpan.FromSeconds(2), name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
 		}
 
 		public static void ConfigureLogging(this WebApplicationBuilder builder)

@@ -9,6 +9,7 @@ scrape_configs:
       - targets: ['localhost:9090']
   - job_name: 'API_ErrorHandler'
     metrics_path: /metrics
+    scrape_timeout: 10s
     tls_config:
       insecure_skip_verify: true 
     scheme: https

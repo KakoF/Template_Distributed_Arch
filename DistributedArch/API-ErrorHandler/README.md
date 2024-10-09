@@ -55,6 +55,17 @@ Kibana é uma plataforma de visualização de dados que faz parte do ELK Stack (
 
 Em resumo, o Kibana é uma ferramenta essencial para a visualização e análise de dados no Elasticsearch, tornando a exploração de grandes volumes de dados mais acessível e interativa.
 
+### Exemplo de busca no devTools
+
+```json
+GET api-errorhandler-development-*/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+```
+
 
 ## Proposta do Projeto
 
@@ -236,3 +247,29 @@ Oct 9, 2024 @ 21:35:32.234      Erro          Exception              Client2    
 ```
 
 Olhando esse exemplo acima, vemos que o **Client1** teve uma info e chamou o client2, que teve um erro. Então pelo TracingId (23db24e1-246b-49be-97cf-47258797cac2) sabemos que essa requisição fazem parte do mesmo fluxo de execução em serviços diferentes
+
+
+### Prometheus - Grafana
+
+No projeto foi adicionado os healths da própria aplicação e do elastic:
+```c#
+builder.Services.AddHealthChecks()
+  .AddCheck("self", () => HealthCheckResult.Healthy())
+  .AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, timeout: TimeSpan.FromSeconds(2), name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
+```
+
+E registrado pelo middleware, no mesmo endpoint /metrics
+```c#
+//Preciso setar essa conf de options, para quando algum serviço externo ficar Unhealthy, não quebrar integração com Prometheus
+app.UseHealthChecksPrometheusExporter("/metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
+app.UseHttpMetrics();
+```
+Ja tem a conf do prometheus para ouvir essas metricas da aplicação, olhar o arquivo prometheus.yml
+
+E apenas com essa configuração temos as métricas basicas, pra essa aplicação (requisições e healths).
+
+E como temos já um grafana rodando. Na pasta grafana_dashboard_export, tem um dash pra essa aplicação para ser importado
+
+**Lembrar apenas de configurare os 2 datasources no grafana:
+* Prometheus: http://prometheus:9090
+* Elastic: http://elasticsearch:9200
