@@ -56,7 +56,7 @@ Kibana é uma plataforma de visualização de dados que faz parte do ELK Stack (
 Em resumo, o Kibana é uma ferramenta essencial para a visualização e análise de dados no Elasticsearch, tornando a exploração de grandes volumes de dados mais acessível e interativa.
 
 
-## Proposta do Repositório
+## Proposta do Projeto
 
 Temos umas rotas que vão gerar exceptions para visualizar como o middleware se comporta
 
