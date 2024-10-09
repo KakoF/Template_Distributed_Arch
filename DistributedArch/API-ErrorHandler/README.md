@@ -209,10 +209,10 @@ public async Task InvokeAsync(HttpContext context)
 	// Tenta pegar o Tracing ID do header ou gera um novo
 	var tracingId = context.Request.Headers["X-Tracing-ID"].FirstOrDefault() ?? Guid.NewGuid().ToString();
 
-	// Adiciona o correlation ID ao contexto de logging
+	// Adiciona o Tracing ID ao contexto de logging
 	using (LogContext.PushProperty("TracingId", tracingId))
 	{
-		// Adiciona o correlation ID aos headers HTTP para serviços downstream
+		// Adiciona o Tracing ID aos headers HTTP para serviços downstream
 		context.Response.Headers.Add("X-Tracing-ID", tracingId);
 
 		// Chama o próximo middleware na pipeline
