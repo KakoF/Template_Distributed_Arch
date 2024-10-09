@@ -1,4 +1,7 @@
 ﻿using API_Refit.Middlewares;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Prometheus;
+using System.Net;
 
 namespace API_Refit.Extensions
 {
@@ -8,6 +11,13 @@ namespace API_Refit.Extensions
 		{
 			app.UseMiddleware(typeof(RequestTracingMiddleware));
 			app.UseMiddleware(typeof(ErrorHandlingMiddleware));
+		}
+
+		public static void UsePrometheus(this WebApplication app)
+		{
+			//Preciso setar essa conf de options, para quando algum serviço externo ficar Unhealthy, não quebrar integração com Prometheus
+			app.UseHealthChecksPrometheusExporter("/metrics", options => options.ResultStatusCodes[HealthStatus.Unhealthy] = (int)HttpStatusCode.OK);
+			app.UseHttpMetrics();
 		}
 	}
 }

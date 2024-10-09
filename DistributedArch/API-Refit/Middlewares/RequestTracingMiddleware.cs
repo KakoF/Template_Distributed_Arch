@@ -20,7 +20,7 @@ namespace API_Refit.Middlewares
 			using (LogContext.PushProperty("TracingId", tracingId))
 			{
 				// Adiciona o correlation ID aos headers HTTP para serviços downstream
-				context.Response.Headers.Add("X-Tracing-ID", tracingId);
+				context.Response.Headers.Append("X-Tracing-ID", tracingId);
 
 				// Chama o próximo middleware na pipeline
 				await _next(context);

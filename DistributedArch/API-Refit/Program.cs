@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureLogging();
 builder.AddServices();
+builder.AddHealthChecks();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.AddCustomMiddlewares();
+
+app.UsePrometheus();
 
 app.UseAuthorization();
 

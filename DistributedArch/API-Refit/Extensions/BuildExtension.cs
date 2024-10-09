@@ -1,6 +1,7 @@
 ﻿using API_Refit.Infrastruct.Interfaces;
 using API_Refit.Service;
 using API_Refit.Service.Interfaces;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Refit;
 using Serilog;
 using Serilog.Exceptions;
@@ -22,6 +23,14 @@ namespace API_Refit.Extensions
 				.AddRefitClient<IErrorHandlerClient>()
 				.ConfigureHttpClient(c => c.BaseAddress = new Uri(builder.Configuration["Clients:ErrorHandlerUrl"]!))
 				.AddHttpMessageHandler<RefitTracingHeaderHandler>();
+		}
+
+		public static void AddHealthChecks(this WebApplicationBuilder builder)
+		{
+
+			builder.Services.AddHealthChecks()
+			.AddCheck("self", () => HealthCheckResult.Healthy())
+			.AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, timeout: TimeSpan.FromSeconds(2), name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
 		}
 
 		public static void ConfigureLogging(this WebApplicationBuilder builder)

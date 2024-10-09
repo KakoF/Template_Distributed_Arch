@@ -112,7 +112,7 @@
             "uid": "0Wrn0uzNz"
           },
           "editorMode": "code",
-          "expr": "healthcheck{healthcheck=\"self\"}",
+          "expr": "healthcheck{healthcheck=\"self\", job=\"API_ErrorHandler\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -194,7 +194,7 @@
             "uid": "0Wrn0uzNz"
           },
           "editorMode": "code",
-          "expr": "healthcheck{healthcheck=\"elasticsearch\"}",
+          "expr": "healthcheck{healthcheck=\"elasticsearch\", job=\"API_ErrorHandler\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -299,7 +299,7 @@
             "uid": "0Wrn0uzNz"
           },
           "editorMode": "code",
-          "expr": "increase(http_requests_received_total[1m])",
+          "expr": "increase(http_requests_received_total{job=\"API_ErrorHandler\"}[1m])",
           "legendFormat": "{{controller}}",
           "range": true,
           "refId": "A"
@@ -310,20 +310,20 @@
             "uid": "0Wrn0uzNz"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_received_total[1m]))",
+          "expr": "sum(increase(http_requests_received_total{job=\"API_ErrorHandler\"}[1m]))",
           "hide": false,
           "legendFormat": "Total",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Panel Title",
+      "title": "Total Request",
       "type": "timeseries"
     },
     {
       "datasource": {
         "type": "elasticsearch",
-        "uid": "aiWI0ukNk"
+        "uid": "WyX659zHk"
       },
       "gridPos": {
         "h": 6,
@@ -358,7 +358,7 @@
           ],
           "datasource": {
             "type": "elasticsearch",
-            "uid": "aiWI0ukNk"
+            "uid": "WyX659zHk"
           },
           "hide": false,
           "metrics": [
@@ -386,13 +386,13 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "API ErrorHandler",
   "uid": "zCOM0uzHk",
-  "version": 6,
+  "version": 9,
   "weekStart": ""
 }
