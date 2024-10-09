@@ -3,7 +3,7 @@ services:
 
   #Redis
   redis:
-    container_name: 'redis_server'
+    container_name: 'redis-template'
     image: redis
     restart: always
     command: redis-server --requirepass Admin@#
