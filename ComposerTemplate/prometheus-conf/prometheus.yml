@@ -26,3 +26,12 @@ scrape_configs:
     scheme: https
     static_configs:
       - targets: ['host.docker.internal:7223']
+
+  - job_name: 'API_EntityFramework'
+    metrics_path: /metrics
+    scrape_timeout: 10s
+    tls_config:
+      insecure_skip_verify: true 
+    scheme: https
+    static_configs:
+      - targets: ['host.docker.internal:7014']
