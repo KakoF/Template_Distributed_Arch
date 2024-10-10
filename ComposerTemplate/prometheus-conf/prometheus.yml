@@ -34,4 +34,4 @@ scrape_configs:
       insecure_skip_verify: true 
     scheme: https
     static_configs:
-      - targets: ['host.docker.internal:7014']
+      - targets: ['host.docker.internal:7197']
