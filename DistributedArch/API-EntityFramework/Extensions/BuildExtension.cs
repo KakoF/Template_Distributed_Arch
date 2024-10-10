@@ -1,7 +1,7 @@
-﻿using API_EntityFramework.Services.Service;
-using Domain.Interfaces;
+﻿using Domain.Interfaces;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Service.Service;
 
 namespace API_EntityFramework.Extensions
 {
