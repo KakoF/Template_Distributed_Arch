@@ -4,7 +4,7 @@ using Domain.Requests;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace API_EntityFramework.Services.Service
+namespace Service.Service
 {
 	public class UserService : IUserService
 	{

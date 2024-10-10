@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace API_EntityFramework.Domain.Requests
+namespace Domain.Requests
 {
 	public record UserCreateRequest(
 		[Required]

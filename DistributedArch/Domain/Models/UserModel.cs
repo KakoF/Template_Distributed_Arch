@@ -1,5 +1,4 @@
-﻿
-namespace API_EntityFramework.Domain.Models
+﻿namespace Domain.Models
 {
 	public class UserModel
 	{

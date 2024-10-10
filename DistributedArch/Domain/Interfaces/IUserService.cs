@@ -1,7 +1,8 @@
-﻿using API_EntityFramework.Domain.Models;
-using API_EntityFramework.Domain.Requests;
+﻿
+using Domain.Models;
+using Domain.Requests;
 
-namespace API_EntityFramework.Services.Interfaces
+namespace Domain.Interfaces
 {
 	public interface IUserService
 	{
@@ -10,6 +11,5 @@ namespace API_EntityFramework.Services.Interfaces
 		Task<bool> DeleteAsync(long id);
 		Task<UserModel?> UpdateAsync(long id, UserCreateRequest request);
 		Task<UserModel> CreateAsync(UserCreateRequest request);
-
 	}
 }

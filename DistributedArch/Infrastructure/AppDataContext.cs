@@ -1,8 +1,7 @@
-﻿using System.Reflection;
-using API_EntityFramework.Domain.Models;
+﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace API_EntityFramework.Infrastructure
+namespace Infrastructure
 {
 	public class AppDataContext : DbContext
 	{
@@ -11,7 +10,6 @@ namespace API_EntityFramework.Infrastructure
 
 		public AppDataContext(DbContextOptions<AppDataContext> options) : base(options)
 		{
-
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

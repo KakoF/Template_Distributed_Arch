@@ -1,6 +1,6 @@
-using API_EntityFramework.Domain.Models;
-using API_EntityFramework.Domain.Requests;
-using API_EntityFramework.Services.Interfaces;
+using Domain.Interfaces;
+using Domain.Models;
+using Domain.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_EntityFramework.Controllers
