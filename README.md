@@ -33,3 +33,6 @@ Projetos distríbuidos, que quero praticar conceitos de **Tracing**
 
 
 E lógico... Cada projeto também vai levar documentação do seu escopo, também como prática.
+
+
+git rm -r --cached <folder>
