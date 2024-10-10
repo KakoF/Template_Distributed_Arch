@@ -1,11 +1,18 @@
 # API com Handle (Middleware) para erros
 
+## Proposta do Projeto
+
+Temos umas rotas que vão gerar exceptions para visualizar como o middleware se comporta
+
+
 ## Infraestrutura
 Ja existe um composer com a infra, e nesse projeto tem 2 dependencias desse arquivo:
 
 ```
 Elasticsearch
 Kibana
+Prometheus
+Grafana
 ```
 Como tem muita infra envolvida, avalie bem se realmente no momento você precisará colocar todos os containers de pé ao mesmo tempo. 
 Na pasta **ComposerTemplate**, executar:
@@ -65,11 +72,6 @@ GET api-errorhandler-development-*/_search
   }
 }
 ```
-
-
-## Proposta do Projeto
-
-Temos umas rotas que vão gerar exceptions para visualizar como o middleware se comporta
 
 ### Handle (Middleware) para erros
 
@@ -271,5 +273,7 @@ E apenas com essa configuração temos as métricas basicas, pra essa aplicaçã
 E como temos já um grafana rodando. Na pasta grafana_dashboard_export, tem um dash pra essa aplicação para ser importado
 
 **Lembrar apenas de configurare os 2 datasources no grafana:
-* Prometheus: http://prometheus:9090
-* Elastic: http://elasticsearch:9200
+* Prometheus: http://localhost:9090
+* Elastic: http://localhost:9200
+* Kibana: http://localhost:5601
+* Grafana: http://localhost:3000
