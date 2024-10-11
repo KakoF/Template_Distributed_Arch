@@ -1,11 +1,12 @@
 ﻿using API_Refit.Infrastruct.Interfaces;
 using API_Refit.Service;
 using API_Refit.Service.Interfaces;
+using Elastic.Ingest.Elasticsearch.DataStreams;
+using Elastic.Serilog.Sinks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Refit;
 using Serilog;
 using Serilog.Exceptions;
-using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 
 namespace API_Refit.Extensions
@@ -46,25 +47,22 @@ namespace API_Refit.Extensions
 				.Enrich.WithExceptionDetails()
 				.WriteTo.Debug()
 				.WriteTo.Console()
-				.WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment!))
-				.Enrich.WithProperty("Environment", environment)
+				.WriteTo.Elasticsearch(new[] { new Uri(configuration["ElasticConfiguration:Uri"]!) }, opts => {
+					//Sao 3 parametros nesse configuracao do index:
+					// type -> nome do que se refere
+					// corpo -> meio do nome
+					// namespace -> final
+					// Nos exemplos eu to optando por logs- (pois é sobre logs)
+					// nome-aplicacao-ambiente- ($"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{environment!.ToLower()})
+					// 2024-10 (DateTime.UtcNow:yyyy-MM)
+					opts.DataStream = new DataStreamName("logs", $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{environment!.ToLower()}", $"{DateTime.UtcNow:yyyy-MM}");
+				}).Enrich.WithProperty("Environment", environment)
 				.Enrich.WithProperty("HostName", System.Net.Dns.GetHostName())
 				.ReadFrom.Configuration(configuration: configuration)
 				.Enrich.WithThreadId()
 				.CreateLogger();
 
 			builder.Host.UseSerilog();
-		}
-
-		public static ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
-		{
-			return new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]!))
-			{
-				AutoRegisterTemplate = true,
-				IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{environment.ToLower()}-{DateTime.UtcNow:yyyy-MM}",
-				NumberOfReplicas = 1,
-				NumberOfShards = 2,
-			};
 		}
 	}
 }
