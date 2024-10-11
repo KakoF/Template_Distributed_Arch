@@ -35,4 +35,11 @@ Projetos distríbuidos, que quero praticar conceitos de **Tracing**
 E lógico... Cada projeto também vai levar documentação do seu escopo, também como prática.
 
 
+Comandos para lembrar
+```cmd
 git rm -r --cached <folder>
+
+docker-compose down
+
+docker-compose up -d --build
+```
