@@ -5,10 +5,17 @@ services:
   redis:
     container_name: 'redis-template'
     image: redis
-    restart: always
     command: redis-server --requirepass Admin@#
     ports:
       - '6379:6379'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #Mongo
   mongodb:
@@ -20,18 +27,33 @@ services:
     ports:
       - "27017:27017"
     command: mongod --bind_ip 0.0.0.0
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #MongoExpress
   mongo-express:
     container_name: mongo-express-template
     image: mongo-express
-    restart: always
     ports:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: admin_1234
       ME_CONFIG_MONGODB_URL: mongodb://admin:admin_1234@mongodb:27017/
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #Prometheus
   prometheus:
@@ -39,7 +61,6 @@ services:
     user: root
     container_name: prometheus-template
     hostname: prometheus
-    restart: unless-stopped
     volumes:
       - ./prometheus-conf/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
@@ -52,6 +73,14 @@ services:
       - 9090:9090
     networks:
       - template
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #Grafana
   grafana:
@@ -60,11 +89,18 @@ services:
     hostname: grafana
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-    restart: unless-stopped
     ports:
       - 3000:3000
     networks:
       - template
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #Elasticsearch
   elasticsearch:
@@ -79,6 +115,14 @@ services:
       - discovery.type=single-node
     networks:
       - template
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '2G'
+        reservations:
+          cpus: '1'
+          memory: '1G'
 
   #Kibana
   kibana:
@@ -90,8 +134,17 @@ services:
       - elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://localhost:9200
+      - NODE_OPTIONS=--max-old-space-size=4096
     networks:
       - template
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '2G'
+        reservations:
+          cpus: '1'
+          memory: '1G'
 
   #RabbitMq
   rabbitmq:
@@ -100,6 +153,14 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
   #SqlServer
   sqlServer:
@@ -112,7 +173,16 @@ services:
       - '1433:1433'
     expose:
       - '1433'
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '1'
+          memory: '2G'
 
+  #Postgres
   postgres:
     container_name: postgres-template
     image: postgres
@@ -124,6 +194,14 @@ services:
       - '5432:5432'
     expose:
       - '5432'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
 
 volumes:
   prometheus_data: {}

@@ -24,21 +24,10 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
-    {
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 9,
-      "title": "Healths",
-      "type": "row"
-    },
     {
       "datasource": {
         "type": "prometheus",
@@ -87,9 +76,9 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 0
       },
-      "id": 4,
+      "id": 2,
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -112,7 +101,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "healthcheck{healthcheck=\"self\", job=\"API_ErrorHandler\"}",
+          "expr": "healthcheck{healthcheck=\"self\", job=\"API_EntityFramework\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -169,9 +158,9 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 0
       },
-      "id": 5,
+      "id": 4,
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -194,13 +183,13 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "healthcheck{healthcheck=\"elasticsearch\", job=\"API_ErrorHandler\"}",
+          "expr": "healthcheck{healthcheck=\"AppDataContext\", job=\"API_EntityFramework\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Elastic Health",
+      "title": "Sql Server (AppDataContext) Health",
       "type": "stat"
     },
     {
@@ -230,9 +219,9 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 7
+        "y": 6
       },
-      "id": 15,
+      "id": 6,
       "options": {
         "orientation": "auto",
         "reduceOptions": {
@@ -253,7 +242,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "system_runtime_cpu_usage{job=\"API_ErrorHandler\"}",
+          "expr": "system_runtime_cpu_usage{job=\"API_EntityFramework\"}",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -290,9 +279,9 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 7
+        "y": 6
       },
-      "id": 16,
+      "id": 8,
       "options": {
         "orientation": "auto",
         "reduceOptions": {
@@ -313,7 +302,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "process_working_set_bytes{job=\"API_ErrorHandler\"} / 1024 / 1024",
+          "expr": "process_working_set_bytes{job=\"API_EntityFramework\"} / 1024 / 1024",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -321,19 +310,6 @@
       ],
       "title": "Memória Utilizada",
       "type": "gauge"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 13
-      },
-      "id": 2,
-      "panels": [],
-      "title": "API ErrorHandler",
-      "type": "row"
     },
     {
       "datasource": {
@@ -396,9 +372,9 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 12
       },
-      "id": 7,
+      "id": 10,
       "options": {
         "legend": {
           "calcs": [],
@@ -418,7 +394,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "increase(http_request_duration_seconds_count{job=\"API_ErrorHandler\"}[1m])",
+          "expr": "increase(http_request_duration_seconds_count{job=\"API_EntityFramework\"}[1m])",
           "legendFormat": "{{controller}}",
           "range": true,
           "refId": "A"
@@ -429,7 +405,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_request_duration_seconds_count{job=\"API_ErrorHandler\"}[1m]))",
+          "expr": "sum(increase(http_request_duration_seconds_count{job=\"API_EntityFramework\"}[1m]))",
           "hide": false,
           "legendFormat": "Total",
           "range": true,
@@ -500,7 +476,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 12
       },
       "id": 12,
       "options": {
@@ -522,7 +498,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "rate(http_request_duration_seconds_count{job=\"API_ErrorHandler\"}[1m])",
+          "expr": "rate(http_request_duration_seconds_count{job=\"API_EntityFramework\"}[1m])",
           "legendFormat": "{{controller}}",
           "range": true,
           "refId": "A"
@@ -533,7 +509,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_request_duration_seconds_count{job=\"API_ErrorHandler\"}[1m]))",
+          "expr": "sum(rate(http_request_duration_seconds_count{job=\"API_EntityFramework\"}[1m]))",
           "hide": false,
           "legendFormat": "Total",
           "range": true,
@@ -604,9 +580,9 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 20
       },
-      "id": 18,
+      "id": 14,
       "options": {
         "legend": {
           "calcs": [],
@@ -626,7 +602,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket{job=\"API_ErrorHandler\"}[1m])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket{job=\"API_EntityFramework\"}[1m])) by (le))",
           "legendFormat": "Percentil 50 (0.5) - Latência",
           "range": true,
           "refId": "A"
@@ -637,7 +613,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket{job=\"API_ErrorHandler\"}[1m])) by (le))",
+          "expr": "histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket{job=\"API_EntityFramework\"}[1m])) by (le))",
           "hide": false,
           "legendFormat": "Percentil 90 (0.9) - Latência",
           "range": true,
@@ -649,7 +625,7 @@
             "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"API_ErrorHandler\"}[1m])) by (le))\r\n",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"API_EntityFramework\"}[1m])) by (le))\r\n",
           "hide": false,
           "legendFormat": "Percentil 95 (0.95) - Latência",
           "range": true,
@@ -658,59 +634,6 @@
       ],
       "title": "Análise de Latência HTTP por Percentil",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "elasticsearch",
-        "uid": "HWR3nezHz"
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 32
-      },
-      "id": 14,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": true,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "targets": [
-        {
-          "alias": "",
-          "bucketAggs": [
-            {
-              "field": "@timestamp",
-              "id": "2",
-              "settings": {
-                "interval": "auto"
-              },
-              "type": "date_histogram"
-            }
-          ],
-          "datasource": {
-            "type": "elasticsearch",
-            "uid": "HWR3nezHz"
-          },
-          "metrics": [
-            {
-              "id": "1",
-              "type": "count"
-            }
-          ],
-          "query": "",
-          "refId": "A",
-          "timeField": "@timestamp"
-        }
-      ],
-      "title": "Log",
-      "type": "logs"
     }
   ],
   "refresh": "5s",
@@ -727,8 +650,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "API ErrorHandler",
-  "uid": "zCOM0uzHk",
+  "title": "API EntityFramework",
+  "uid": "XcJp5ezNz",
   "version": 8,
   "weekStart": ""
 }

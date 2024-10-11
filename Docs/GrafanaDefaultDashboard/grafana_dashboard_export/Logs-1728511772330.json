@@ -24,14 +24,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "elasticsearch",
-        "uid": "aiWI0ukNk"
+        "uid": "HWR3nezHz"
       },
       "gridPos": {
         "h": 19,
@@ -66,14 +66,12 @@
           ],
           "datasource": {
             "type": "elasticsearch",
-            "uid": "aiWI0ukNk"
+            "uid": "HWR3nezHz"
           },
-          "hide": false,
           "metrics": [
             {
               "id": "1",
-              "settings": {},
-              "type": "logs"
+              "type": "count"
             }
           ],
           "query": "",
@@ -101,6 +99,6 @@
   "timezone": "",
   "title": "Logs",
   "uid": "-UWht9kNz",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }

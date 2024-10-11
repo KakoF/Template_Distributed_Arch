@@ -24,14 +24,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "0Wrn0uzNz"
+        "uid": "QX3e7ezHk"
       },
       "fieldConfig": {
         "defaults": {
@@ -98,7 +98,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "0Wrn0uzNz"
+            "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
           "expr": "healthcheck{healthcheck=\"self\", job=\"API_Refit\"}",
@@ -113,7 +113,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "0Wrn0uzNz"
+        "uid": "QX3e7ezHk"
       },
       "fieldConfig": {
         "defaults": {
@@ -160,7 +160,7 @@
         "x": 12,
         "y": 0
       },
-      "id": 4,
+      "id": 3,
       "options": {
         "colorMode": "background",
         "graphMode": "area",
@@ -180,7 +180,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "0Wrn0uzNz"
+            "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
           "expr": "healthcheck{healthcheck=\"elasticsearch\", job=\"API_Refit\"}",
@@ -189,13 +189,132 @@
           "refId": "A"
         }
       ],
-      "title": "Elastic Health",
+      "title": "Self Health",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "0Wrn0uzNz"
+        "uid": "QX3e7ezHk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "id": 11,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "system_runtime_cpu_usage{job=\"API_Refit\"}",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Uso CPU % ",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "QX3e7ezHk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 15,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.4.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "process_working_set_bytes{job=\"API_Refit\"} / 1024 / 1024",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Memória Utilizada",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "QX3e7ezHk"
       },
       "fieldConfig": {
         "defaults": {
@@ -247,40 +366,15 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "Refit"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 9,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
-        "y": 6
+        "y": 12
       },
-      "id": 6,
+      "id": 5,
       "options": {
         "legend": {
           "calcs": [],
@@ -297,10 +391,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "0Wrn0uzNz"
+            "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "increase(http_requests_received_total{job=\"API_Refit\"}[1m])",
+          "expr": "increase(http_request_duration_seconds_count{job=\"API_Refit\"}[1m])",
           "legendFormat": "{{controller}}",
           "range": true,
           "refId": "A"
@@ -308,10 +402,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "0Wrn0uzNz"
+            "uid": "QX3e7ezHk"
           },
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_received_total{job=\"API_Refit\"}[1m]))",
+          "expr": "sum(increase(http_request_duration_seconds_count{job=\"API_Refit\"}[1m]))",
           "hide": false,
           "legendFormat": "Total",
           "range": true,
@@ -323,27 +417,246 @@
     },
     {
       "datasource": {
-        "type": "elasticsearch",
-        "uid": "AAEip9kHz"
+        "type": "prometheus",
+        "uid": "QX3e7ezHk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "rate(http_request_duration_seconds_count{job=\"API_Refit\"}[1m])",
+          "legendFormat": "{{controller}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_request_duration_seconds_count{job=\"API_Refit\"}[1m]))",
+          "hide": false,
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Taxa Request",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "QX3e7ezHk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 20
       },
-      "id": 8,
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.5, sum(rate(http_request_duration_seconds_bucket{job=\"API_Refit\"}[1m])) by (le))",
+          "legendFormat": "Percentil 50 (0.5) - Latência",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.9, sum(rate(http_request_duration_seconds_bucket{job=\"API_Refit\"}[1m])) by (le))",
+          "hide": false,
+          "legendFormat": "Percentil 90 (0.9) - Latência",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "QX3e7ezHk"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"API_Refit\"}[1m])) by (le))\r\n",
+          "hide": false,
+          "legendFormat": "Percentil 95 (0.95) - Latência",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Análise de Latência HTTP por Percentil",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "elasticsearch",
+        "uid": "OPU976zHz"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "id": 9,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
         "showLabels": false,
-        "showTime": true,
+        "showTime": false,
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "9.4.1",
       "targets": [
         {
           "alias": "",
@@ -359,14 +672,12 @@
           ],
           "datasource": {
             "type": "elasticsearch",
-            "uid": "AAEip9kHz"
+            "uid": "OPU976zHz"
           },
-          "hide": false,
           "metrics": [
             {
               "id": "1",
-              "settings": {},
-              "type": "logs"
+              "type": "count"
             }
           ],
           "query": "",
@@ -374,7 +685,7 @@
           "timeField": "@timestamp"
         }
       ],
-      "title": "Logs",
+      "title": "Log",
       "type": "logs"
     }
   ],
@@ -393,7 +704,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "API Refit",
-  "uid": "QvNncrzNk",
-  "version": 4,
+  "uid": "8lVcDezNz",
+  "version": 8,
   "weekStart": ""
 }
