@@ -272,8 +272,7 @@ E apenas com essa configuração temos as métricas basicas, pra essa aplicaçã
 
 E como temos já um grafana rodando. Na pasta grafana_dashboard_export, tem um dash pra essa aplicação para ser importado
 
-**Lembrar apenas de configurare os 2 datasources no grafana:
+**Lembrar apenas de configurar datasources no grafana:
 * Prometheus: http://localhost:9090
 * Elastic: http://localhost:9200
-* Kibana: http://localhost:5601
-* Grafana: http://localhost:3000
+* Jeager: http://localhost:16686

@@ -1,18 +1,19 @@
-# API exemplo Refit (Lib Abstração de Client)
+# API com EntityFramewor
 
 ## Proposta do Projeto
 
-Aplicação apenas mostra uma utilização do Refit para abstração de consumo de clients
-
+Simples implementação do EntityFramework
 
 ## Infraestrutura
-Ja existe um composer com a infra, e nesse projeto dependencias:
+Ja existe um composer com a infra, e nesse projeto tem 2 dependencias desse arquivo:
 
 ```
 Elasticsearch
 Kibana
 Prometheus
 Grafana
+SqlServer
+Jaeger
 ```
 Como tem muita infra envolvida, avalie bem se realmente no momento você precisará colocar todos os containers de pé ao mesmo tempo. 
 Na pasta **ComposerTemplate**, executar:
@@ -21,16 +22,16 @@ Na pasta **ComposerTemplate**, executar:
 docker compose up -d 
 ```
 
+## SQLServer
+Banco relacional, esse projeto aponta para apenas uma tabela **User** no Database **PerformRetriveData**
+Tem um script na raiz do projeto, dentro de docs, que gera toda a estrutura...
 
-Dependecias de outros projetos em execução
-```
-API-ErrorHandler
-```
+Seguimos com a abordagem database-first
 
 ## Elasticsearch
 
 Rota do container: http://localhost:5601/app/home
-DataView Gerado: api-refit-{env}-{yyyy-mm}
+DataView Gerado: logs-api-errorhandler-{env}-{yyyy-mm}
 
 O Elasticsearch é um mecanismo de busca e análise distribuído, baseado na tecnologia Lucene, que permite armazenar, pesquisar e analisar grandes volumes de dados de maneira rápida e em tempo real. Aqui estão alguns pontos-chave sobre o Elasticsearch:
 
@@ -71,13 +72,55 @@ Em resumo, o Kibana é uma ferramenta essencial para a visualização e análise
 ### Exemplo de busca no devTools
 
 ```json
-GET logs-api-refit-development-*/_search
+GET api-errorhandler-development-*/_search
 {
   "query": {
     "match_all": {}
   }
 }
 ```
+
+## Jaeger
+
+Rota do container: **http://localhost:16686/**
+
+Nome do Service: **API-EntityFramework**
+
+Jaeger é uma ferramenta de rastreamento distribuído (distributed tracing) desenvolvida inicialmente pela Uber Technologies. Ele permite monitorar e analisar transações complexas em ambientes distribuídos, ajudando a entender como diferentes serviços interagem entre si.
+
+* Agent:
+
+Um daemon que escuta as traces enviadas pelos serviços. Ele coleta as informações e as encaminha para o coletor.
+
+* Collector:
+
+Recebe as traces do agent e as processa. Em seguida, armazena os dados no backend (por exemplo, Elasticsearch).
+
+* Query:
+
+Uma interface de usuário web que permite visualizar e explorar as traces armazenadas.
+
+* Storage:
+
+O backend onde os dados de rastreamento são armazenados. Pode ser Elasticsearch, Cassandra ou outro.
+
+### Principais Funcionalidades
+
+* Distributed Context Propagation:
+
+Permite que o contexto de uma transação seja propagado por diversos serviços, facilitando a rastreabilidade de ponta a ponta.
+
+* Performance e Latência:
+
+Ajuda a identificar gargalos de performance e latência em sistemas distribuídos.
+
+* Análise de Dependências:
+
+Visualiza como diferentes serviços interagem e dependem uns dos outros.
+
+Como Funciona na Prática
+Quando uma requisição entra em um sistema, ela gera uma "span" (uma unidade de trabalho), que é registrada e propagada através dos serviços que a processam. Cada serviço adiciona informações à "span", criando um "trace" completo que pode ser visualizado no Jaeger para entender todo o ciclo de vida da transação.
+
 
 ### Logs
 
@@ -91,7 +134,7 @@ Pela configuração no appsettings:
       "Default": "Warning", // Altera o padrão para Warning (ignora informações automáticas)
       "Microsoft": "Warning", // Ignora informações do sistema
       "System": "Warning", // Ignora informações do .NET Core
-      "API_Refit": "Information" // Define Information para sua aplicação
+      "API_EntityFramework": "Information" // Define Information para sua aplicação
     }
   },
   "Serilog": {
@@ -100,7 +143,7 @@ Pela configuração no appsettings:
       "Override": {
         "Microsoft": "Warning",
         "System": "Warning",
-        "API_Refit": "Information"
+        "API_EntityFramework": "Information"
       }
     }
   },
@@ -110,7 +153,8 @@ Pela configuração no appsettings:
   "AllowedHosts": "*"
 }
 ```
-Onde registramos apenas Warnings do **Default, Microsoft e System**. E para Logs de info que escolhermos lançar, seria utilizada pelo **API_Refit** (lembrando que isso é o namespace do projeto, se for fazer o mesmo em outro, precisa colocar o mesmo namespace)
+Onde registramos apenas Warnings do **Default, Microsoft e System**. E para Logs de info que escolhermos lançar, seria utilizada pelo **API_EntityFramework** (lembrando que isso é o namespace do projeto, se for fazer o mesmo em outro, precisa colocar o mesmo namespace)
+
 
 
 ### Trace
@@ -121,19 +165,18 @@ O projeto também tem uma abordagem de trace da requisições também utilizado 
 ```c#
 public async Task InvokeAsync(HttpContext context)
 {
-	// Tenta pegar o correlation ID do header ou gera um novo
-  var tracingId = context.Request.Headers["X-Tracing-ID"].FirstOrDefault() ?? Guid.NewGuid().ToString();
-  // Adiciona o TracingId no contexto, assim consigo persiti-lo em outros pontos na aplicação
-  context.Items["TracingId"] = tracingId;
-  // Adiciona o correlation ID ao contexto de logging
-  using (LogContext.PushProperty("TracingId", tracingId))
-  {
-    // Adiciona o correlation ID aos headers HTTP para serviços downstream
-    context.Response.Headers.Append("X-Tracing-ID", tracingId);
+	// Tenta pegar o Tracing ID do header ou gera um novo
+	var tracingId = context.Request.Headers["X-Tracing-ID"].FirstOrDefault() ?? Guid.NewGuid().ToString();
 
-    // Chama o próximo middleware na pipeline
-    await _next(context);
-  }
+	// Adiciona o Tracing ID ao contexto de logging
+	using (LogContext.PushProperty("TracingId", tracingId))
+	{
+		// Adiciona o Tracing ID aos headers HTTP para serviços downstream
+		context.Response.Headers.Add("X-Tracing-ID", tracingId);
+
+		// Chama o próximo middleware na pipeline
+		await _next(context);
+	}
 
 }
 ```
@@ -159,8 +202,9 @@ Olhando esse exemplo acima, vemos que o **Client1** teve uma info e chamou o cli
 No projeto foi adicionado os healths da própria aplicação e do elastic:
 ```c#
 builder.Services.AddHealthChecks()
-  .AddCheck("self", () => HealthCheckResult.Healthy())
-  .AddElasticsearch(builder.Configuration["ElasticConfiguration:Uri"]!, timeout: TimeSpan.FromSeconds(2), name: "elasticsearch", failureStatus: HealthStatus.Unhealthy, tags: new[] { nameof(builder.Environment) }); // Configuração para seu Elasticsearch
+.AddCheck("self", () => HealthCheckResult.Healthy())
+.AddUrlGroup(new Uri(builder.Configuration["Jaeger:HealthCheck"]!), timeout: TimeSpan.FromSeconds(2), name: "jaeger", failureStatus: HealthStatus.Unhealthy)
+.AddDbContextCheck<AppDataContext>();
 ```
 
 E registrado pelo middleware, no mesmo endpoint /metrics
