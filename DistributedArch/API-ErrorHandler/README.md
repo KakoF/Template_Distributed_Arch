@@ -6,7 +6,7 @@ Temos umas rotas que vão gerar exceptions para visualizar como o middleware se 
 
 
 ## Infraestrutura
-Ja existe um composer com a infra, e nesse projeto tem 2 dependencias desse arquivo:
+Ja existe um composer com a infra, e nesse projeto tem dependencias:
 
 ```
 Elasticsearch

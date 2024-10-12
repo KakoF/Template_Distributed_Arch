@@ -6,7 +6,7 @@ Aplicação apenas mostra uma utilização do Refit para abstração de consumo 
 
 
 ## Infraestrutura
-Ja existe um composer com a infra, e nesse projeto tem 2 dependencias desse arquivo:
+Ja existe um composer com a infra, e nesse projeto dependencias:
 
 ```
 Elasticsearch

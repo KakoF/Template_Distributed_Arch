@@ -41,6 +41,7 @@ namespace API_EntityFramework.Extensions
 
 			builder.Services.AddHealthChecks()
 			.AddCheck("self", () => HealthCheckResult.Healthy())
+			.AddUrlGroup(new Uri(builder.Configuration["Jaeger:HealthCheck"]!), timeout: TimeSpan.FromSeconds(2), name: "jaeger", failureStatus: HealthStatus.Unhealthy)
 			.AddDbContextCheck<AppDataContext>();
 		}
 		public static void AddTracing(this WebApplicationBuilder builder)
