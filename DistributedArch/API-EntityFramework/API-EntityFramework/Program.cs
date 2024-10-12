@@ -7,6 +7,7 @@ builder.AddDataContexts();
 builder.ConfigureLogging();
 builder.AddServices();
 builder.AddHealthChecks();
+builder.AddTracing();
 
 // Add services to the container.
 

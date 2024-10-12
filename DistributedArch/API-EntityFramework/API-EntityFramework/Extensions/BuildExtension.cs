@@ -1,7 +1,5 @@
 ﻿using Domain.Interfaces;
-using Elastic.Channels;
 using Elastic.Ingest.Elasticsearch.DataStreams;
-using Elastic.Ingest.Elasticsearch;
 using Elastic.Serilog.Sinks;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +8,8 @@ using Serilog;
 using Serilog.Exceptions;
 using Service.Service;
 using System.Reflection;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Resources;
 
 namespace API_EntityFramework.Extensions
 {
@@ -42,6 +42,15 @@ namespace API_EntityFramework.Extensions
 			builder.Services.AddHealthChecks()
 			.AddCheck("self", () => HealthCheckResult.Healthy())
 			.AddDbContextCheck<AppDataContext>();
+		}
+		public static void AddTracing(this WebApplicationBuilder builder)
+		{
+			builder.Services.AddOpenTelemetry().WithTracing(b => {
+				b.SetResourceBuilder(
+					ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
+				 .AddAspNetCoreInstrumentation()
+				 .AddOtlpExporter(opts => { opts.Endpoint = new Uri(builder.Configuration["Jaeger:Uri"]!); });
+			});
 		}
 
 		public static void ConfigureLogging(this WebApplicationBuilder builder)
