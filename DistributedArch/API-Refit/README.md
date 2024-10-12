@@ -71,7 +71,7 @@ Em resumo, o Kibana é uma ferramenta essencial para a visualização e análise
 ### Exemplo de busca no devTools
 
 ```json
-GET api-refit-development-*/_search
+GET logs-api-refit-development-*/_search
 {
   "query": {
     "match_all": {}

@@ -24,7 +24,7 @@ docker compose up -d
 ## Elasticsearch
 
 Rota do container: http://localhost:5601/app/home
-DataView Gerado: api-errorhandler-{env}-{yyyy-mm}
+DataView Gerado: logs-api-errorhandler-{env}-{yyyy-mm}
 
 O Elasticsearch é um mecanismo de busca e análise distribuído, baseado na tecnologia Lucene, que permite armazenar, pesquisar e analisar grandes volumes de dados de maneira rápida e em tempo real. Aqui estão alguns pontos-chave sobre o Elasticsearch:
 
