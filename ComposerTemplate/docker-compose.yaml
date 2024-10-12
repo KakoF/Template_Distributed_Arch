@@ -162,6 +162,20 @@ services:
           cpus: '0.1'
           memory: '256M'
 
+  ##Jaeger
+  jaeger:
+    image: jaegertracing/opentelemetry-all-in-one
+    container_name: jaeger-template
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "4317:4317"
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+      COLLECTOR_OTLP_GRPC_PORT: 4317
+
   #SqlServer
   sqlServer:
     container_name: sqlServer-template
