@@ -223,3 +223,132 @@ E como temos já um grafana rodando. Na pasta grafana_dashboard_export, tem um d
 * Prometheus: http://localhost:9090
 * Elastic: http://localhost:9200
 * Jeager: http://localhost:16686
+
+
+### k6
+
+É uma ferramenta de teste de carga de código aberto desenvolvida pela Grafana Labs. Ela é projetada para ser fácil de usar e produtiva para equipes de engenharia, permitindo testes de desempenho de forma eficiente
+
+No projeto temos uma pasta k6, com scripts para execução dos testes
+
+## Principais Características
+* Desempenho: K6 permite simular tráfego realista para testar a capacidade e o desempenho de aplicativos web.
+
+* Flexibilidade: Pode ser usado para testar APIs, sites e outras aplicações web.
+
+ *Extensibilidade: Oferece uma API rica e suporte para scripts personalizados, permitindo que você adapte os testes às suas necessidades específicas
+
+* Integração: Pode ser integrado com outras ferramentas de monitoramento e análise, como Grafana
+
+## Como Funciona
+Você escreve scripts em JavaScript que simulam requisições HTTP para o seu aplicativo, e K6 executa esses scripts sob carga para medir o desempenho e identificar possíveis gargalos.
+
+## Benefícios
+
+* Facilidade de Uso: Scripts simples e intuitivos.
+
+* Resultados Detalhados: Fornece métricas detalhadas sobre o desempenho do teste.
+
+* Código Aberto: Gratuito e com uma comunidade ativa de desenvolvedores.
+
+## Tipos de testes
+
+### Smoke test
+É uma verificação rápida e inicial para garantir que as principais funcionalidades de um sistema ou aplicativo estão funcionando corretamente. Ele é geralmente o primeiro teste realizado após uma compilação para detectar falhas básicas que possam impedir testes mais aprofundados. A ideia é confirmar que o "sistema básico não pega fogo", daí o nome "smoke test". Se o smoke test passar, significa que o sistema está pronto para ser submetido a testes mais rigorosos.
+
+Geralmente abrange:
+
+* Inicialização do aplicativo.
+
+* Funcionalidades principais.
+
+* Conexões com bancos de dados ou serviços externos.
+
+### Load test (teste de carga/performance)
+
+É um tipo de teste de desempenho que simula um número crescente de usuários ou transações em um sistema para determinar como ele se comporta sob carga. O objetivo é identificar gargalos de desempenho, tempos de resposta e capacidade máxima antes que o sistema comece a falhar ou se tornar lento. Aqui está um panorama sobre isso:
+
+**Objetivos do Load Test:**
+* Identificar Limites de Capacidade: Saber quantos usuários simultâneos ou transações o sistema pode suportar.
+
+* Medição de Desempenho: Avaliar tempos de resposta e throughput em diferentes níveis de carga.
+
+* Detecção de Gargalos: Identificar componentes do sistema que causam lentidão ou falhas sob carga.
+
+**Ferramentas Populares de Load Testing:**
+* Apache JMeter: Ferramenta open-source que pode simular diferentes cargas de trabalho e medir o desempenho de aplicações web.
+
+* Gatling: Ferramenta de código aberto com uma DSL em Scala para definir cenários de teste de carga.
+
+* k6: Uma ferramenta de teste de carga moderna, fácil de usar, com scripts em JavaScript.
+
+* LoadRunner: Ferramenta comercial com suporte abrangente para diferentes tipos de aplicações.
+
+**Como Realizar um Load Test:**
+* Definir Cenários de Teste: Identificar os casos de uso mais críticos a serem testados.
+
+* Configurar a Ferramenta: Preparar os scripts de teste na ferramenta escolhida.
+
+* Executar Testes de Carga: Gradualmente aumentar a carga e monitorar o comportamento do sistema.
+
+* Analisar Resultados: Examinar métricas de desempenho e identificar possíveis gargalos.
+
+* Ajustar e Repetir: Ajustar a configuração do sistema com base nos resultados e repetir os testes conforme necessário.
+
+**Benefícios:**
+* Melhora a Confiabilidade: Garante que o sistema possa suportar cargas reais de produção.
+
+* Identifica Problemas: Detecta problemas antes que afetem os usuários finais.
+
+* Planejamento de Capacidade: Ajuda a planejar a escalabilidade do sistema para futuras necessidades.
+
+
+### Stress test  e Spike test:
+
+Perguntas que queremos responder com esses 2 cenários de testes:
+ 1. Como seu sistema se comporta em condições extremas?
+ 2. Qual é a capacidade máxima do seu sistema em termos de usuários ou taxa de tranferência?
+ 3. Ponto de ruptura do seu sistema?
+ 4. O sistema se recupera sem intervenção manual após o término do teste de estresse?
+
+**Resoluções:**
+
+* Objetivo: Avaliar a capacidade do sistema de lidar com condições extremas além da carga normal esperada.
+
+* Como Funciona: Coloca o sistema sob uma carga muito alta ou priva-o de recursos críticos, como * memória ou CPU.
+
+* Benefícios: Identifica o ponto de falha do sistema e ajuda a garantir que ele possa se recuperar de uma falha.
+
+**Spike Test:**
+
+* Objetivo: Avaliar a capacidade do sistema de lidar com picos repentinos de carga.
+
+* Como Funciona: Aumenta drasticamente a carga de forma abrupta e depois retorna ao nível normal.
+
+* enefícios: Testa a resiliência do sistema e garante que ele possa gerenciar picos de tráfego inesperados sem falhar.
+
+
+### Soak test:
+
+É um tipo de teste de desempenho que verifica a estabilidade e a confiabilidade de um sistema ao submetê-lo a uma carga normal por um período prolongado. O objetivo é identificar problemas como vazamentos de memória, degradação de desempenho e outros comportamentos anômalos que podem não ser detectados em testes de carga de curta duração. Basicamente, você "embebe" o sistema em carga, mantendo-o sob pressão constante por um longo tempo para ver como ele se comporta.
+
+**Benefícios do Soak Test:**
+
+* Detecção de Vazamentos de Recursos: Identifica vazamentos de memória ou conexões que podem levar a falhas ao longo do tempo.
+
+* Avaliação de Desempenho a Longo Prazo: Garante que o sistema mantenha um desempenho aceitável mesmo após um uso prolongado.
+
+* Estabilidade: Verifica se o sistema pode operar continuamente sem falhas ou degradação significativa de desempenho.
+
+
+### Breakpoint test:
+
+É uma avaliação que determina o ponto exato em que o sistema ou aplicativo começa a falhar sob carga específica. É uma combinação de Load Testing e Stress Testing, onde você aumenta gradualmente a carga até encontrar o limite de capacidade do sistema.
+
+**Objetivos do Breakpoint Test:**
+* Identificar o Ponto de Falha: Saber exatamente quando e onde o sistema começa a falhar.
+
+* Avaliar Limites de Performance: Determinar a capacidade máxima do sistema.
+
+* Melhorar a Resiliência: Usar os resultados para fortalecer áreas críticas do sistema.
+
