@@ -1,7 +1,7 @@
 import http from 'k6/http';
 
 export const options = {
-    scenarios:{
+    scenarios: {
         listar: {
             executor: 'constant-arrival-rate',
             exec: 'listar',
@@ -26,14 +26,14 @@ export const options = {
     discardResponseBodies: true
 }
 
-export function listar(){
-    http.get(__ENV.URL+'/crocodiles')
+export function listar() {
+    http.get(__ENV.URL + '/crocodiles')
 };
 
-export function buscar(){
-    if(__VU % 2 === 0){
-        http.get(__ENV.URL+'/crocodiles/2')
-    }else{
-        http.get(__ENV.URL+'/crocodiles/1')
+export function buscar() {
+    if (__VU % 2 === 0) {
+        http.get(__ENV.URL + '/crocodiles/2')
+    } else {
+        http.get(__ENV.URL + '/crocodiles/1')
     }
 };
