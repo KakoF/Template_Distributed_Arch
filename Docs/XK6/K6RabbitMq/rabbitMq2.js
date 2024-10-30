@@ -4,9 +4,9 @@ import crypto from 'k6/crypto';
 
 export let options = {
     stages: [
-        { duration: '30s', target: 50 },
-        { duration: '1m', target: 100 },
-        { duration: '10s', target: 0 }
+        { duration: '1s', target: 1 },
+        /*{ duration: '1m', target: 100 },
+        { duration: '10s', target: 0 }*/
     ]
 };
 
@@ -17,8 +17,9 @@ function toBase64(str) {
 
 export default function () {
     //let url = 'http://localhost:15672/api/exchanges/%2f/amq.default/publish';
-    let url = 'http://localhost:15672/api/exchanges/%2f/amq.direct/publish';
+    let url = 'http://localhost:15672/api/exchanges/%2f/user_direct_event/publish';
 
+    
     let payload = JSON.stringify({
         properties: {
             delivery_mode: 2,
@@ -27,7 +28,7 @@ export default function () {
         },
 
         routing_key: "test",
-        payload: "Esta é uma mensagem de teste enviada para o RabbitMQ",
+        payload: " {\r\n        \r\n            \"name\": \"kako\"\r\n        }",
         payload_encoding: "string"
     });
 
