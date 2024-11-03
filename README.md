@@ -33,25 +33,3 @@ Projetos distríbuidos, que quero praticar conceitos de **Tracing**
 
 
 E lógico... Cada projeto também vai levar documentação do seu escopo, também como prática.
-
-
-Comandos para lembrar
-```cmd
-git rm -r --cached <folder>
-
-docker-compose down
-
-docker-compose up -d --build
-
-dotnet run --launch-profile https
-
-
-docker logs:
-docker logs jaeger-template
-
-ping:
-curl -v http://localhost:4317
-
-Encontrar ip do container:
-docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" jaeger-template
-```
