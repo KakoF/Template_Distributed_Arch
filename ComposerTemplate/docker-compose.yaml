@@ -162,6 +162,62 @@ services:
           cpus: '0.1'
           memory: '256M'
 
+  #Zookeeper-confluence
+  zookeeper-confluence:
+    container_name: zookeeper-confluence-template
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
+  #Kafka-confluence
+  kafka-confluence:
+    container_name: kafka-confluence-template
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-confluence:2181
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
+  #Kafka-confluence
+  kafka-ui:
+    container_name: kafka-ui-template
+    image: tchiotludo/akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connection:
+            localhost:
+              properties:
+                bootstrap.servers: "kafka-confluence:29092"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
+
+
   ##Jaeger
   jaeger:
     image: jaegertracing/opentelemetry-all-in-one
