@@ -163,14 +163,34 @@ services:
           memory: '256M'
 
   #Zookeeper-confluence
-  zookeeper-confluence:
-    container_name: zookeeper-confluence-template
-    image: confluentinc/cp-zookeeper:latest
-    ports:
-      - 2181:2181
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    container_name: zookeeper-template
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
+    networks:
+      - template
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
-      ALLOW_ANONYMOUS_LOGIN: 'yes'
+      ZOOKEEPER_TICK_TIME: 2000
+
+  #Kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1
+    container_name: kafka-template
+    networks:
+      - template
+    ports:
+    # To learn about configuring Kafka for access across networks see
+    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+      - "9092:9092"
+      - "9093:9093"
     deploy:
       resources:
         limits:
@@ -179,44 +199,42 @@ services:
         reservations:
           cpus: '0.1'
           memory: '256M'
-  #Kafka-confluence
-  kafka-confluence:
-    container_name: kafka-confluence-template
-    image: confluentinc/cp-kafka:latest
-    ports:
-      - 9092:9092
-      - 29092:29092
+    depends_on:
+      - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-confluence:2181
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: '512M'
-        reservations:
-          cpus: '0.1'
-          memory: '256M'
-  #Kafka-confluence
-  kafka-ui:
-    container_name: kafka-ui-template
-    image: tchiotludo/akhq
-    environment:
-      AKHQ_CONFIGURATION: |
-        akhq:
-          connection:
-            localhost:
-              properties:
-                bootstrap.servers: "kafka-confluence:29092"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: '512M'
-        reservations:
-          cpus: '0.1'
-          memory: '256M'
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LISTENERS: PLAINTEXT_INTERNAL://0.0.0.0:29092,PLAINTEXT_C://0.0.0.0:9093,PLAINTEXT_L://0.0.0.0:9092,
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT_INTERNAL://broker:29092,PLAINTEXT_L://localhost:9092,PLAINTEXT_C://broker:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT_INTERNAL:PLAINTEXT,PLAINTEXT_L:PLAINTEXT,PLAINTEXT_C:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT_INTERNAL
 
+  #Kafka-ui
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui-template
+    networks:
+      - template
+    depends_on: 
+      - kafka
+    ports:
+      - "7777:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
+        reservations:
+          cpus: '0.1'
+          memory: '256M'
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9093
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
 
   ##Jaeger
   jaeger:
