@@ -1,7 +1,9 @@
 using Domain.Interfaces;
 using Domain.Models;
 using Domain.Requests;
+using Domain.Requests.QueryParams;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
 
 namespace API_EntityFramework.Controllers
 {
@@ -22,6 +24,25 @@ namespace API_EntityFramework.Controllers
 		{
 			_logger.LogInformation(nameof(GetAsync));
 			return await _service.GetAsync();
+		}
+
+		[HttpGet]
+		[Route("Paged")]
+		public async Task<IEnumerable<UserModel>> PaginatedAsync([FromQuery] PagedParams parameters)
+		{
+			_logger.LogInformation(nameof(PaginatedAsync));
+			var tasks = new List<Task<IEnumerable<UserModel>>>();
+
+			for (int i = 0; i < 5; i++)
+			{
+				var pageParameters = new PagedParams(parameters);
+				pageParameters.Page = parameters.Page + i;
+
+				tasks.Add(_service.PagedAsync(pageParameters));
+			}
+
+			var results = await Task.WhenAll(tasks);
+			return results.SelectMany(r => r).OrderBy(x => x.Id);
 		}
 
 		[HttpGet]

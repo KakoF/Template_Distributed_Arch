@@ -1,6 +1,7 @@
 ﻿using Domain.Interfaces;
 using Domain.Models;
 using Domain.Requests;
+using Domain.Requests.QueryParams;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,56 +9,90 @@ namespace Service.Service
 {
 	public class UserService : IUserService
 	{
-		private readonly AppDataContext _context;
-		public UserService(AppDataContext context)
+		private readonly IDbContextFactory<AppDataContext> _contextFactory;
+		public UserService(IDbContextFactory<AppDataContext> contextFactory)
 		{
-			_context = context;
+			_contextFactory = contextFactory;
 		}
+
 		public async Task<UserModel> CreateAsync(UserCreateRequest request)
 		{
 			var user = new UserModel(request.Name);
-			await _context.Users.AddAsync(user);
-			await _context.SaveChangesAsync();
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				await context.Users.AddAsync(user);
+				await context.SaveChangesAsync();
+			}
 			return user;
 		}
 
+
 		public async Task<bool> DeleteAsync(long id)
 		{
-			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
-			if (user == null)
-				return false;
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+				if (user == null)
+					return false;
 
-			_context.Users.Remove(user);
-			await _context.SaveChangesAsync();
-			return true;
+				context.Users.Remove(user);
+				await context.SaveChangesAsync();
+				return true;
+			}
 		}
 
 		public async Task<IEnumerable<UserModel>> GetAsync()
 		{
-			var query = _context.Users.AsNoTracking();
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				var query = context.Users.AsNoTracking();
 
-			var users = await query.ToListAsync();
+				var users = await query.ToListAsync();
 
-			return users;
+				return users;
+			}
 		}
+
+
+		public async Task<IEnumerable<UserModel>> PagedAsync(PagedParams parameters)
+		{
+			Console.WriteLine(parameters.Page);
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				var query = context.Users.AsNoTracking();
+
+				var users = await query.Skip((parameters.Page - 1) * parameters.PageSize).Take(parameters.PageSize).ToListAsync();
+
+				return users;
+			}
+		}
+
+
 
 		public async Task<UserModel?> GetAsync(long id)
 		{
-			var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
-			return user;
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				var user = await context.Users.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+				return user;
+			}
+			
 		}
 
 		public async Task<UserModel?> UpdateAsync(long id, UserCreateRequest request)
 		{
-			var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
-			if (user == null)
-				return default;
+			using (var context = _contextFactory.CreateDbContext())
+			{
+				var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+				if (user == null)
+					return default;
 
-			user.Update(request.Name);
+				user.Update(request.Name);
 
-			_context.Users.Update(user);
-			await _context.SaveChangesAsync();
-			return user;
+				context.Users.Update(user);
+				await context.SaveChangesAsync();
+				return user;
+			}
 		}
 	}
 }

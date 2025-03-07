@@ -28,7 +28,7 @@ namespace API_EntityFramework.Extensions
 		{
 			builder
 				.Services
-				.AddDbContext<AppDataContext>(
+				.AddDbContextFactory<AppDataContext>(
 					x =>
 					{
 						x.UseSqlServer(ApiConfiguration.ConnectionString);
