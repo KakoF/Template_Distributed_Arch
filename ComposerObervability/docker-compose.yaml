@@ -1,0 +1,75 @@
+services:
+
+  grafana:
+    container_name: grafana-opentelemetry
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/dashboards:/provisioning/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      OTEL_RESOURCE_ATTRIBUTES: "service.name=grafana"
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+      - pyroscope
+      - opentelemetry-collector
+
+  prometheus:
+    container_name: prometheus-opentelemetry
+    image: prom/prometheus:v3.0.1
+    command: 
+      - "--web.enable-remote-write-receiver"
+      - "--web.enable-otlp-receiver"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+      
+  tempo:
+    container_name: tempo-opentelemetry
+    image: grafana/tempo:latest
+    command: 
+      - "-config.file=/etc/tempo.yaml"
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+
+  loki:
+    container_name: loki-opentelemetry
+    image: grafana/loki:latest
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/loki.yaml
+        #ports:
+        #- 3100:3100
+    command: 
+      - "-config.file=/etc/loki/loki.yaml"
+
+  pyroscope:
+    container_name: pyroscope-collector
+    image: pyroscope/pyroscope:latest
+    #ports:
+    # - 4040:4040
+    command:
+      - "server"
+    volumes:
+      - ./pyroscope/server.yaml:/etc/pyroscope/server.yaml
+
+  opentelemetry-collector:
+    container_name: opentelemetry-collector
+    image: otel/opentelemetry-collector-contrib:latest
+    volumes:
+      - ./opentelemetry-collector/otel-config.yaml:/etc/otel-config.yaml
+    command:
+      - "--config=/etc/otel-config.yaml"
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+
