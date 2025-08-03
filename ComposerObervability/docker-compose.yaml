@@ -40,22 +40,28 @@ services:
       - "-config.file=/etc/tempo.yaml"
     volumes:
       - ./tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "3200:3200"   # HTTP server
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "14268:14268" # Jaeger ingest
+      - "55680:55680" # OpenTelemetry receiver
 
   loki:
     container_name: loki-opentelemetry
     image: grafana/loki:latest
     volumes:
       - ./loki/loki.yaml:/etc/loki/loki.yaml
-        #ports:
-        #- 3100:3100
+    ports:
+      - 3100:3100
     command: 
       - "-config.file=/etc/loki/loki.yaml"
 
   pyroscope:
     container_name: pyroscope-collector
     image: pyroscope/pyroscope:latest
-    #ports:
-    # - 4040:4040
+    ports:
+     - 4040:4040
     command:
       - "server"
     volumes:
